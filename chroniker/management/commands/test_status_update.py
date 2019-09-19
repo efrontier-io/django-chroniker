@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import time
 from optparse import make_option
 
@@ -8,16 +6,13 @@ from django.core.management.base import BaseCommand
 
 from chroniker.models import Job
 
+
 class Command(BaseCommand):
     help = 'Incrementally updates status, to help testing transaction ' + \
         'behavior on different database backends.'
 
-    option_list = getattr(BaseCommand, 'option_list', ()) + (
-        make_option('--seconds',
-            dest='seconds',
-            default=60,
-            help='The number of total seconds to count up to.'),
-        )
+    option_list = getattr(BaseCommand, 'option_list',
+                          ()) + (make_option('--seconds', dest='seconds', default=60, help='The number of total seconds to count up to.'),)
 
     def create_parser(self, prog_name, subcommand):
         """
@@ -31,10 +26,7 @@ class Command(BaseCommand):
         current_version = StrictVersion(django.get_version(django.VERSION))
         if current_version >= version_threshold:
             parser.add_argument('args', nargs="*")
-            parser.add_argument('--seconds',
-                dest='seconds',
-                default=60,
-                help='The number of total seconds to count up to.')
+            parser.add_argument('--seconds', dest='seconds', default=60, help='The number of total seconds to count up to.')
             self.add_arguments(parser)
         return parser
 

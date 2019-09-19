@@ -1,30 +1,23 @@
 from __future__ import print_function
-
 import sys
 from optparse import make_option
 
 import six
 
-import django
+from django import get_version, VERSION
 from django.core.management.base import BaseCommand
 
 from chroniker.models import get_current_job
+
 
 class Command(BaseCommand):
     help = 'Runs a specific monitoring routine.'
 
     option_list = getattr(BaseCommand, 'option_list', ()) + (
-        make_option('--imports',
-            dest='imports',
-            help='Modules to import.'),
-        make_option('--query',
-            dest='query',
-            help='The query to run.'),
-        make_option('--verbose',
-            dest='verbose',
-            default=False,
-            help='If given, displays extra logging messages.'),
-        )
+        make_option('--imports', dest='imports', help='Modules to import.'),
+        make_option('--query', dest='query', help='The query to run.'),
+        make_option('--verbose', dest='verbose', default=False, help='If given, displays extra logging messages.'),
+    )
 
     def create_parser(self, prog_name, subcommand):
         """
@@ -35,19 +28,12 @@ class Command(BaseCommand):
         from distutils.version import StrictVersion # pylint: disable=E0611
         parser = super(Command, self).create_parser(prog_name, subcommand)
         version_threshold = StrictVersion('1.10')
-        current_version = StrictVersion(django.get_version(django.VERSION))
+        current_version = StrictVersion(get_version(VERSION))
         if current_version >= version_threshold:
             parser.add_argument('args', nargs="*")
-            parser.add_argument('--imports',
-                dest='imports',
-                help='Modules to import.')
-            parser.add_argument('--query',
-                dest='query',
-                help='The query to run.')
-            parser.add_argument('--verbose',
-                dest='verbose',
-                default=False,
-                help='If given, displays extra logging messages.')
+            parser.add_argument('--imports', dest='imports', help='Modules to import.')
+            parser.add_argument('--query', dest='query', help='The query to run.')
+            parser.add_argument('--verbose', dest='verbose', default=False, help='If given, displays extra logging messages.')
             self.add_arguments(parser)
         return parser
 

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import sys
 from optparse import make_option
 
@@ -10,14 +8,12 @@ from chroniker.models import Job, JobDependency
 
 from criticalpath import Node
 
+
 class Command(BaseCommand):
     help = 'Calculates the total time a series of chained jobs will take.'
 
-    option_list = getattr(BaseCommand, 'option_list', ()) + (
-        make_option('--samples',
-            default=20,
-            help='The number of log samples to use when estimating mean job run time.'),
-        )
+    option_list = getattr(BaseCommand, 'option_list',
+                          ()) + (make_option('--samples', default=20, help='The number of log samples to use when estimating mean job run time.'),)
 
     def create_parser(self, prog_name, subcommand):
         """
@@ -31,9 +27,7 @@ class Command(BaseCommand):
         current_version = StrictVersion(django.get_version(django.VERSION))
         if current_version >= version_threshold:
             parser.add_argument('root_job_id')
-            parser.add_argument('--samples',
-                default=20,
-                help='The number of log samples to use when estimating mean job run time.')
+            parser.add_argument('--samples', default=20, help='The number of log samples to use when estimating mean job run time.')
             self.add_arguments(parser)
         return parser
 
@@ -55,7 +49,7 @@ class Command(BaseCommand):
             system.add(node)
 
         # Add all links between task nodes.
-        print('-'*80)
+        print('-' * 80)
         for job in chain:
             if not job.enabled:
                 continue
@@ -80,4 +74,4 @@ class Command(BaseCommand):
         print('critical_path:', critical_path)
         system.print_times()
 
-        print('min hours:', system.duration*(1/60.)*(1/60.))
+        print('min hours:', system.duration * (1 / 60.) * (1 / 60.))
