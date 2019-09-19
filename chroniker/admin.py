@@ -41,7 +41,10 @@ class HTMLWidget(forms.Widget):
                 related_model = self.remote_field.related_model
             else:
                 related_model = self.remote_field.model
-            obj = related_model._default_manager.get(**{key: value})
+            try:
+                obj = related_model._default_manager.get(**{key: value})
+            except:
+                obj = "404"
             related_url = '../../../%s/%s/%d/' % (related_model._meta.app_label, related_model._meta.object_name.lower(), value)
             value = format_html("<a href='%s'>%s</a>" % (related_url, escape(obj)))
 
